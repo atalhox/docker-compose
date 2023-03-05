@@ -1,0 +1,99 @@
+version: '3.1'
+
+networks:
+  network-zabbix:
+    driver: bridge
+
+services:
+  zabbix-mysql:
+    container_name: zabbix-mysql
+    image: mysql:5.7
+    networks:
+      - network-zabbix
+    ports:
+      - '3306:3306'
+    volumes:
+      - './zabbix/mysql:/var/lib/data'
+    environment:
+      - MYSQL_ROOT_PASSWORD=carryontech
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=carryontech
+
+  zabbix-server:
+    user: root
+    container_name: zabbix-server
+    image: zabbix/zabbix-server-mysql:ubuntu-5.0.1
+    networks:
+      - network-zabbix
+    links:
+      - zabbix-mysql
+    restart: always
+    ports:
+      - '10051:10051'
+    volumes:
+      - './alertscripts:/usr/lib/zabbix/alertscripts'
+      - './odbc_config:/usr/local/unixODBC/odbc_config'
+      - './unixODBC:/usr/local/unixODBC'
+    environment:
+      - DB_SERVER_HOST=zabbix-mysql
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=carryontech
+    depends_on:
+      - zabbix-mysql
+
+  zabbix-frontend:
+    container_name: zabbix-frontend
+    image: zabbix/zabbix-web-apache-mysql:ubuntu-5.0.1
+    networks:
+      - network-zabbix
+    links:
+      - zabbix-mysql
+    restart: always
+    ports:
+      - '80:8080'
+      - '443:8443'
+    environment:
+      - DB_SERVER_HOST=zabbix-mysql
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=carryontech
+      - PHP_TZ=America/Sao_Paulo
+    depends_on:
+      - zabbix-mysql
+   
+  zabbix-grafana:
+    container_name: zabbix-grafana
+    image: grafana/grafana
+    networks:
+      - network-zabbix
+    links:
+      - zabbix-mysql
+      - zabbix-server
+    restart: always
+    ports:
+      - '3000:3000'
+    environment: 
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+    depends_on:
+      - zabbix-mysql
+      - zabbix-server
+
+  zabbix-agent:
+    container_name: zabbix-agent
+    image: zabbix/zabbix-agent2:alpine-5.0.1
+    user: root
+    networks:
+      - network-zabbix
+    links:
+      - zabbix-server
+    restart: always
+    privileged: true
+    volumes:
+      - ./var/run:/var/run
+    ports:
+      - '10050:10050'
+    environment:
+      - ZBX_HOSTNAME=Zabbix server
+      # - ZBX_SERVER_HOST=172.18.0.1

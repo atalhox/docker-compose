@@ -1,2 +1,2 @@
-# docker-compose
-A repository for docker-composes 
+# docker-compose-reference
+Github repo for storing docker-compose examples

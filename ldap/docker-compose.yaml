@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  openldap:
+    container_name: openldap
+    image: osixia/openldap
+    ports:
+      - 390:389
+      - 636:636
+    environment:
+      - LDAP_DOMAIN=ldap
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_ORGANISATION=ldap
+      - LDAP_BASE_DN="cn=admin,dc=stix,dc=com"
+      - LDAP_ORGANISATION="stix"
+      - LDAP_DOMAIN="stix.com"
+      - LDAP_CONFIG_PASSWORD="config"
+    volumes:
+      - ./data/config:/etc/ldap/slapd.d
+      - ./data/database:/var/lib/ldap

@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  mailcatcher:
+    container_name: mailcatcher
+    restart: on-failure:10
+    image: dockage/mailcatcher:0.7.1
+    ports:
+    - "1080:1080"
+    - "1025:1025"
+    # environment:
+    #   - EMAIL_HOST=${EMAIL_HOST}
+    #   - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+    #   - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+    #   - EMAIL_PORT=${EMAIL_PORT}
+    #   - EMAIL_USE_TLS=${EMAIL_USE_TLS}

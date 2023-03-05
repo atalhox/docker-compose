@@ -1,0 +1,46 @@
+version: '3.1'
+
+services:
+
+  mysql_master:
+    image: mysql:5.7
+    container_name: "mysql_master"
+    ports:
+      - "3310:3306"
+    networks:
+      - default     
+    volumes: 
+      - ./mysql_data_master/config/var/lib/mysql:/var/lib/mysql
+      - ./mysql_data_master/config/etc/mysql/conf.d:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    command:
+      - "--character-set-server=utf8"
+      - "--innodb_log_buffer_size=32M"
+      - "--innodb_log_file_size=80M"
+      - "--max_allowed_packet=8M"
+
+  mysql_slave:
+    image: mysql:5.7
+    container_name: "mysql_slave"
+    ports:
+      - "3311:3306"
+    networks:
+      - default
+    volumes: 
+      - ./mysql_data_slave/config/var/lib/mysql:/var/lib/mysql
+      - ./mysql_data_slave/config/etc/mysql:/etc/mysql
+      - ./mysql_data_slave/tmp/shell_script:/tmp/shell_script
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    command:
+      - "--character-set-server=utf8"
+      - "--innodb_log_buffer_size=32M"
+      - "--innodb_log_file_size=80M"
+      - "--max_allowed_packet=8M"
