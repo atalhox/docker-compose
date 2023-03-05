@@ -14,16 +14,3 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./ssl:/ssl/
-  # openldap:
-  #     container_name: openldap
-  #     image: osixia/openldap
-  #     ports:
-  #       - 390:389
-  #       - 636:636
-  #     environment:
-  #       - LDAP_DOMAIN=sec4you.local
-  #       - LDAP_ADMIN_PASSWORD=admin
-  #       - LDAP_ORGANISATION=sec4you.local
-  #     volumes:
-  #       - ./data/openldap/slapd/config:/etc/ldap/slapd.d
-  #       - ./data/openldap/slapd/database:/var/lib/ldap

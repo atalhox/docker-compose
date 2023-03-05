@@ -6,7 +6,7 @@ services:
     image: mysql:5.7
     container_name: "mysql_master"
     ports:
-      - "3310:3306"
+      - "3306:3306"
     networks:
       - default     
     volumes: 
@@ -27,7 +27,7 @@ services:
     image: mysql:5.7
     container_name: "mysql_slave"
     ports:
-      - "3311:3306"
+      - "3307:3306"
     networks:
       - default
     volumes: 

@@ -5,7 +5,7 @@ services:
     image: mysql:8.0
     container_name: mysql_80
     ports:
-      - "3307:3306"
+      - "3306:3306"
     networks:
       - default     
     volumes: 

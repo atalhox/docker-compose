@@ -20,17 +20,3 @@ cd "$odbc_dir"
 wget "$odbc_url"
 gunzip "$odbc_file"
 tar xvf "${odbc_file%.gz}"
-# mv $odbc_dir/$odbc_version_folder $odbc_dir/$odbc_default_name
-
-# cp -f $odbc_config_dir/odbcinst.ini /etc/odbcinst.ini
-# cp -f $odbc_config_dir/odbc.ini /etc/odbc.ini
-
-# cd "$odbc_dir/$odbc_dir_name"
-# autoreconf -fi
-# ./configure --enable-server --with-unixodbc
-# make
-# make install
-
-# # testing
-# odbcinst -j
-# isql test
